@@ -1,0 +1,109 @@
+#swagger.yml
+
+openapi: 3.0.0
+info:
+  title: "RP Flask REST API"
+  description: "An API about people and notes"
+  version: "1.0.0"
+
+servers:
+  - url: "/api"
+
+components:
+  schemas:
+    Trail:
+      type: "object"
+      required:
+        - TrailName
+      properties:
+        TrailName:
+          type: "string"
+        TrailSummary:
+          type: "string"
+        TrailDescription:
+          type: "string"
+        Difficulty:
+          type: "string"
+        Location:
+          type: "string"
+        Length:
+          type: "integer"
+        ElevationGain:
+          type: "integer"
+        RouteType:
+          type: "string"
+        OwnerID:
+          type: "integer"
+  parameters:
+    TrailName:
+      name: "TrailName"
+      description: "Name of the trail to get"
+      in: path
+      required: True
+      schema:
+        type: "string"
+
+paths:
+  /trails:
+    get:
+      operationId: "trails.read_all"
+      tags:
+        - "Trails"
+      summary: "Read the list of trails"
+      responses:
+        "200":
+          description: "Successfully read trails list"
+
+    post:
+      operationId: "trails.create"
+      tags:
+        - Trails
+      summary: "Create a trail"
+      requestBody:
+        description: "Trail to create"
+        required: True
+        content:
+          application/json:
+            schema:
+              x-body-name: "trail"
+              $ref: "#/components/schemas/Trail"
+      responses:
+        "201":
+          description: "Successfully created trail"
+  /trails/{TrailName}:
+    get:
+      operationId: "trails.read_one"
+      tags:
+        - Trails
+      summary: "Read one trail"
+      parameters:
+        - $ref: "#/components/parameters/TrailName"
+      responses:
+        "200":
+          description: "Successfully read trail"
+    put:
+      tags:
+        - Trails
+      operationId: "trails.update"
+      summary: "Update a trail"
+      parameters:
+        - $ref: "#/components/parameters/TrailName"
+      responses:
+        "200":
+          description: "Successfully updated trail"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              x-body-name: "trail"
+              $ref: "#/components/schemas/Trail"
+    delete:
+      tags:
+        - Trails
+      operationId: "trails.delete"
+      summary: "Delete a trail"
+      parameters:
+        - $ref: "#/components/parameters/TrailName"
+      responses:
+        "204":
+          description: "Successfully deleted trail"

@@ -1,0 +1,19 @@
+<!-- templates/home.html --> 
+ 
+<!DOCTYPE html>
+<html lang="en">
+<head>
+   <meta charset="UTF-8">
+   <title>COMP2001 CW2</title>
+</head>
+<body>
+   <h1>
+       Trails!
+   </h1>
+   <ul>
+      {% for trail in trails %}
+      <li>{{trail.name}}</li>
+      {% endfor %}
+   </ul>
+</body>
+</html>
