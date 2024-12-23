@@ -34,6 +34,37 @@ components:
           type: "string"
         OwnerID:
           type: "integer"
+
+    Feature:
+      type: "object"
+      required:
+        - FeatureID
+      properties:
+        TrailFeature:
+          type: "string"
+
+    LocationPoint:
+      type: "object"
+      required:
+        - LocationPointID
+      properties:
+        Latitude:
+          type: "integer"
+        Longitude:
+          type: "integer"
+        Description:
+          type: "string"
+
+    User:
+      type: "object"
+      required:
+        - UserID
+      properties:
+        Email_Address:
+          type: "string"
+        Role:
+          type: "string"
+
   parameters:
     TrailName:
       name: "TrailName"
@@ -42,6 +73,30 @@ components:
       required: True
       schema:
         type: "string"
+
+    FeatureID:
+      name: "FeatureID"
+      description: "ID of the feature"
+      in: path
+      required: true
+      schema:
+        type: "integer"
+
+    LocationPointID:
+      name: "LocationPointID"
+      description: "Id of a location point"
+      in: path
+      required: true
+      schema:
+        type: "integer"
+
+    UserID:
+      name: "UserID"
+      description: "ID of a user"
+      in: path
+      required: true
+      schema:
+        type: "integer"
 
 paths:
   /trails:
@@ -66,7 +121,14 @@ paths:
           application/json:
             schema:
               x-body-name: "trail"
-              $ref: "#/components/schemas/Trail"
+              allOf:
+                - $ref: "#/components/schemas/Trail"
+                - type: "object"
+              properties:
+                Email:
+                  type: "string"
+                Password:
+                  type: "string"
       responses:
         "201":
           description: "Successfully created trail"
@@ -107,3 +169,214 @@ paths:
       responses:
         "204":
           description: "Successfully deleted trail"
+  /features:
+    post:
+      operationId: "features.create"
+      tags:
+        - Features
+      summary: "Create a feature associated with a trail"
+      requestBody:
+        description: "Feature to create"
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: "trailfeature"
+              type: "object"
+              properties:
+                TrailID:
+                  type: "integer"
+                FeatureID:
+                  type: "integer"
+                TrailFeature:
+                  type: "string"
+      responses:
+        "201":
+          description: "Successfully created a feature"
+  /features/{FeatureID}:
+    get:
+      operationId: "features.read_one"
+      tags:
+        - Features
+      summary: "Read one feature"
+      parameters:
+        - $ref: "#/components/parameters/FeatureID"
+      responses:
+        "200":
+          description: "Successfully read one feature"
+    put:
+      tags:
+        - Features
+      operationId: "features.update"
+      summary: "Update a feature"
+      parameters:
+        - $ref: "#/components/parameters/FeatureID"
+      responses:
+        "200":
+          description: "Successfully updated feature"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              x-body-name: "feature"
+              type: "object"
+              properties:
+                TrailFeature:
+                  type: "string"
+    delete:
+      tags:
+        - Features
+      operationId: "features.delete"
+      summary: "Delete a feature"
+      parameters:
+        - $ref: "#/components/parameters/FeatureID"
+      responses:
+        "204":
+          description: "Successfully deleted feature"
+  /locationpoints:
+    post:
+      operationId: "locationpoints.create"
+      tags:
+        - LocationPoints
+      summary: "Create a location point associated with a trail"
+      requestBody:
+        description: "Location point to create"
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: "traillocation"
+              type: "object"
+              properties:
+                TrailID:
+                  type: "integer"
+                LocationPointID:
+                  type: "integer"
+                Latitude:
+                  type: "integer"
+                Longitude:
+                  type: "integer"
+                Description:
+                  type: "string"
+      responses:
+        "201":
+          description: "Successfully created a location point"
+  /locationpoints/{LocationPointID}:
+    get:
+      operationId: "locationpoints.read_one"
+      tags:
+        - LocationPoints
+      summary: "Read one location point"
+      parameters:
+        - $ref: "#/components/parameters/LocationPointID"
+      responses:
+        "200":
+          description: "Successfully read one location point"
+
+    put:
+      tags:
+        - LocationPoints
+      operationId: "locationpoints.update"
+      summary: "Update a location point"
+      parameters:
+        - $ref: "#/components/parameters/LocationPointID"
+      responses:
+        "200":
+          description: "Successfully updated location point"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              x-body-name: "locationpoint"
+              type: "object"
+              properties:
+                Latitude:
+                  type: "integer"
+                Longitude:
+                  type: "integer"
+                Description:
+                  type: "string"
+    delete:
+      tags:
+        - LocationPoints
+      operationId: "locationpoints.delete"
+      summary: "Delete a location point"
+      parameters:
+        - $ref: "#/components/parameters/LocationPointID"
+      responses:
+        "204":
+          description: "Successfully deleted location point"
+  /users:
+    get:
+      operationId: "users.read_all"
+      tags:
+        - "User"
+      summary: "Read the list of users"
+      responses:
+        "200":
+          description: "Successfully read users list"
+
+    post:
+      operationId: "users.create"
+      tags:
+        - User
+      summary: "Create a user"
+      requestBody:
+        description: "User to create"
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: "user"
+              type: object
+              properties:
+                Email_Address:
+                  type: string
+                Role:
+                  type: string
+      responses:
+        "201":
+          description: "Successfully created a user"
+  /users/{UserID}:
+    get:
+      operationId: "users.read_one"
+      tags:
+        - User
+      summary: "Read one user"
+      parameters:
+        - $ref: "#/components/parameters/UserID"
+      responses:
+        "200":
+          description: "Successfully read one user"
+
+    put:
+      tags:
+        - User
+      operationId: "users.update"
+      summary: "Update a user"
+      parameters:
+        - $ref: "#/components/parameters/UserID"
+      responses:
+        "200":
+          description: "Successfully updated user"
+      requestBody:
+        content:
+          application/json:
+            schema:
+              x-body-name: "user"
+              type: "object"
+              properties:
+                Email_Address:
+                  type: "string"
+                Role:
+                  type: "string"
+    delete:
+      tags:
+        - User
+      operationId: "users.delete"
+      summary: "Delete a user"
+      parameters:
+        - $ref: "#/components/parameters/UserID"
+      responses:
+        "204":
+          description: "Successfully deleted user"

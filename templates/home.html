@@ -10,10 +10,25 @@
    <h1>
        Trails!
    </h1>
+   
+   {% for trail in trails %}
+   <h2>{{trail.TrailName}}</h2>
+   <h3> {{ trail.Users.Email_Address }}</h3>
    <ul>
-      {% for trail in trails %}
-      <li>{{trail.name}}</li>
+      <h3> Features </h3>
+      {% for feature in trail.features %}
+      <li>
+         {{ feature.TrailFeature }}
+      </li> 
+      {% endfor %}
+      <h3> Location Points </h3>
+      {% for point in trail.locationpoints %}
+      <li>
+         {{ point.Description}}
+      </li>
       {% endfor %}
    </ul>
+   {% endfor %}
+   
 </body>
 </html>
