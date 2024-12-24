@@ -74,6 +74,22 @@ components:
       schema:
         type: "string"
 
+    Email:
+      name: "Email"
+      description: "Login Email"
+      in: path
+      required: True
+      schema:
+        type: "string"
+
+    Password:
+      name: "Password"
+      description: "Login Password"
+      in: path
+      required: True
+      schema:
+        type: "string"
+
     FeatureID:
       name: "FeatureID"
       description: "ID of the feature"
@@ -99,12 +115,15 @@ components:
         type: "integer"
 
 paths:
-  /trails:
+  /trails/{Email}/{Password}:
     get:
       operationId: "trails.read_all"
       tags:
         - "Trails"
       summary: "Read the list of trails"
+      parameters:
+        - $ref: "#/components/parameters/Email"
+        - $ref: "#/components/parameters/Password"
       responses:
         "200":
           description: "Successfully read trails list"
@@ -114,6 +133,9 @@ paths:
       tags:
         - Trails
       summary: "Create a trail"
+      parameters:
+        - $ref: "#/components/parameters/Email"
+        - $ref: "#/components/parameters/Password"
       requestBody:
         description: "Trail to create"
         required: True
@@ -121,18 +143,11 @@ paths:
           application/json:
             schema:
               x-body-name: "trail"
-              allOf:
-                - $ref: "#/components/schemas/Trail"
-                - type: "object"
-              properties:
-                Email:
-                  type: "string"
-                Password:
-                  type: "string"
+              $ref: "#/components/schemas/Trail"
       responses:
         "201":
           description: "Successfully created trail"
-  /trails/{TrailName}:
+  /trails/{TrailName}/{Email}/{Password}:
     get:
       operationId: "trails.read_one"
       tags:
@@ -140,9 +155,12 @@ paths:
       summary: "Read one trail"
       parameters:
         - $ref: "#/components/parameters/TrailName"
+        - $ref: "#/components/parameters/Email"
+        - $ref: "#/components/parameters/Password"
       responses:
         "200":
           description: "Successfully read trail"
+
     put:
       tags:
         - Trails
@@ -150,6 +168,8 @@ paths:
       summary: "Update a trail"
       parameters:
         - $ref: "#/components/parameters/TrailName"
+        - $ref: "#/components/parameters/Email"
+        - $ref: "#/components/parameters/Password"
       responses:
         "200":
           description: "Successfully updated trail"
@@ -159,6 +179,7 @@ paths:
             schema:
               x-body-name: "trail"
               $ref: "#/components/schemas/Trail"
+
     delete:
       tags:
         - Trails
@@ -166,6 +187,8 @@ paths:
       summary: "Delete a trail"
       parameters:
         - $ref: "#/components/parameters/TrailName"
+        - $ref: "#/components/parameters/Email"
+        - $ref: "#/components/parameters/Password"
       responses:
         "204":
           description: "Successfully deleted trail"
