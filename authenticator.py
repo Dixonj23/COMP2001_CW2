@@ -4,7 +4,6 @@ import requests
 
 auth_url = 'https://web.socem.plymouth.ac.uk/COMP2001/auth/api/users'
 
-#valid login details for testing purposes
 email = 'tim@plymouth.ac.uk'
 password = 'COMP2001!'
 
