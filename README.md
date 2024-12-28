@@ -1,4 +1,4 @@
-# COMP2001_Report
+# COMP2001 Report
 
 By Jack Dixon
  
